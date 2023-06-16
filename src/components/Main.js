@@ -10,17 +10,20 @@ const Main = ({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) => {
   const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
-    api.getUserInfo().then(data => {
-      setUserName(data.name);
-      setUserDescription(data.about);
-      setUserAvatar(data.avatar);
-    });
+    api.getUserInfo()
+      .then(data => {
+        setUserName(data.name);
+        setUserDescription(data.about);
+        setUserAvatar(data.avatar);
+      })
+      .catch(err => console.log(err));
 
-    api.getInitialCards().then(data => {
-      setCards(data);
-    });
+    api.getInitialCards()
+      .then(data => {
+        setCards(data);
+      })
+      .catch(err => console.log(err));
   }, []);
-
 
 
   return (
@@ -47,7 +50,7 @@ const Main = ({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) => {
       <section className="places container" aria-label="Добавленные места">
         <ul className="places__grid">
           {
-            cards.map(({_id, ...props}) => (
+            cards.map(({ _id, ...props }) => (
               <Card key={_id} {...props} onCardClick={onCardClick}/>
             ))
           }
