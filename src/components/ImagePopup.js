@@ -1,13 +1,13 @@
 import React from 'react';
 
-const ImagePopup = () => {
+const ImagePopup = ({ card, isOpen, onClose }) => {
   return (
-    <div className="popup popup_name_full-image">
+    <div className={`popup popup_name_full-image ${isOpen && 'popup_opened'}`}>
       <div className="popup__container popup__container_image">
-        <button type="button" className="button-close opacity-effect popup__close"></button>
+        <button type="button" className="button-close opacity-effect popup__close" onClick={onClose}></button>
 
-        <img src="#" alt="Изображение" className="popup__image"/>
-        <p className="popup__image-name"></p>
+        <img src={card.link} alt={card.name} className="popup__image"/>
+        <p className="popup__image-name">{card.name}</p>
       </div>
     </div>
   );

@@ -1,13 +1,18 @@
 import React from 'react';
 
-const Card = ({ link, name, likes }) => {
+const Card = ({ link, name, likes, onCardClick }) => {
+
+  function handleClick() {
+    onCardClick({ link, name });
+  }
+
   return (
     <li className="places__item">
       <figure className="place-card places__card">
         <button type="button" aria-label="Удалить"
                 className="button-delete opacity-effect place-card__delete"></button>
         <div className="place-card__image-wrap">
-          <img src={link} alt={name} className="place-card__image"/>
+          <img src={link} alt={name} className="place-card__image" onClick={handleClick}/>
         </div>
         <figcaption className="place-card__body">
           <h2 className="place-card__name">{name}</h2>

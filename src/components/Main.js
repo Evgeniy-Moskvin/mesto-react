@@ -2,7 +2,7 @@ import React from 'react';
 import { api } from '../utils/api';
 import Card from './Card';
 
-const Main = ({ onEditProfile, onAddPlace, onEditAvatar }) => {
+const Main = ({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) => {
 
   const [userName, setUserName] = React.useState('');
   const [userDescription, setUserDescription] = React.useState('');
@@ -20,6 +20,8 @@ const Main = ({ onEditProfile, onAddPlace, onEditAvatar }) => {
       setCards(data);
     });
   }, []);
+
+
 
   return (
     <main>
@@ -46,7 +48,7 @@ const Main = ({ onEditProfile, onAddPlace, onEditAvatar }) => {
         <ul className="places__grid">
           {
             cards.map(({_id, ...props}) => (
-              <Card key={_id} {...props}/>
+              <Card key={_id} {...props} onCardClick={onCardClick}/>
             ))
           }
         </ul>
