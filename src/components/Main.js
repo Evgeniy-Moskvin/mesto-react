@@ -2,7 +2,7 @@ import React from 'react';
 import { api } from '../utils/api';
 import Card from './Card';
 
-const Main = () => {
+const Main = ({ onEditProfile, onAddPlace, onEditAvatar }) => {
 
   const [userName, setUserName] = React.useState('');
   const [userDescription, setUserDescription] = React.useState('');
@@ -24,7 +24,7 @@ const Main = () => {
   return (
     <main>
       <section className="profile container">
-        <div className="profile__avatar-wrap">
+        <div className="profile__avatar-wrap" onClick={onEditAvatar}>
           <img src={userAvatar} alt="Аватар пользователя" className="profile__avatar"/>
         </div>
 
@@ -32,14 +32,14 @@ const Main = () => {
           <div className="profile__name-wrap">
             <h1 className="profile__name">{userName}</h1>
             <button type="button" className="button-edit profile__button-edit opacity-effect"
-                    aria-label="Редактировать профиль"></button>
+                    aria-label="Редактировать профиль" onClick={onEditProfile}></button>
           </div>
 
           <p className="profile__job">{userDescription}</p>
         </div>
 
         <button type="button" className="button-add profile__button-add opacity-effect"
-                aria-label="Добавить место"></button>
+                aria-label="Добавить место" onClick={onAddPlace}></button>
       </section>
 
       <section className="places container" aria-label="Добавленные места">
