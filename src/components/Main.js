@@ -1,22 +1,16 @@
 import React from 'react';
 import { api } from '../utils/api';
 import Card from './Card';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 const Main = ({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) => {
 
-  const [userName, setUserName] = React.useState('');
-  const [userDescription, setUserDescription] = React.useState('');
-  const [userAvatar, setUserAvatar] = React.useState('');
+
   const [cards, setCards] = React.useState([]);
 
+  const currentUser = React.useContext(CurrentUserContext);
+
   React.useEffect(() => {
-    api.getUserInfo()
-      .then(data => {
-        setUserName(data.name);
-        setUserDescription(data.about);
-        setUserAvatar(data.avatar);
-      })
-      .catch(err => console.log(err));
 
     api.getInitialCards()
       .then(data => {
@@ -25,22 +19,21 @@ const Main = ({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) => {
       .catch(err => console.log(err));
   }, []);
 
-
   return (
     <main>
       <section className="profile container">
         <div className="profile__avatar-wrap" onClick={onEditAvatar}>
-          <img src={userAvatar} alt="Аватар пользователя" className="profile__avatar"/>
+          <img src={currentUser.avatar} alt="Аватар пользователя" className="profile__avatar"/>
         </div>
 
         <div className="profile__info">
           <div className="profile__name-wrap">
-            <h1 className="profile__name">{userName}</h1>
+            <h1 className="profile__name">{currentUser.name}</h1>
             <button type="button" className="button-edit profile__button-edit opacity-effect"
                     aria-label="Редактировать профиль" onClick={onEditProfile}></button>
           </div>
 
-          <p className="profile__job">{userDescription}</p>
+          <p className="profile__job">{currentUser.about}</p>
         </div>
 
         <button type="button" className="button-add profile__button-add opacity-effect"

@@ -5,12 +5,24 @@ import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import { api } from '../utils/api';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
+  const [currentUser, setCurrentUser] = React.useState({});
+
+  React.useEffect(() => {
+    api.getUserInfo()
+      .then(data => {
+        setCurrentUser(data);
+      })
+      .catch(err => console.log(err));
+  }, []);
+
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
@@ -38,89 +50,92 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({ link: '', name: '' });
 
   return (
-    <>
-      <Header/>
+    <CurrentUserContext.Provider value={currentUser}>
+      <>
+        <Header/>
 
-      <Main
-        onEditProfile={handleEditProfileClick}
-        onAddPlace={handleAddPlaceClick}
-        onEditAvatar={handleEditAvatarClick}
-        onCardClick={handleCardClick}
-      />
+        <Main
+          onEditProfile={handleEditProfileClick}
+          onAddPlace={handleAddPlaceClick}
+          onEditAvatar={handleEditAvatarClick}
+          onCardClick={handleCardClick}
+        />
 
-      <Footer/>
+        <Footer/>
 
-      <PopupWithForm
-        name={'edit-profile'}
-        title={'Редактировать профиль'}
-        buttonName={'Сохранить'}
-        isOpen={isEditProfilePopupOpen}
-        onClose={closeAllPopups}
-      >
-        <label className="form__group">
-          <input type="text" name="name" placeholder="Имя"
-                 className="form__input form__input_name_name" minLength="2" maxLength="40"
-                 required/>
-          <span className="form__error-message form__error-message_field_name"></span>
-        </label>
+        <PopupWithForm
+          name={'edit-profile'}
+          title={'Редактировать профиль'}
+          buttonName={'Сохранить'}
+          isOpen={isEditProfilePopupOpen}
+          onClose={closeAllPopups}
+        >
+          <label className="form__group">
+            <input type="text" name="name" placeholder="Имя"
+                   className="form__input form__input_name_name" minLength="2" maxLength="40"
+                   required/>
+            <span className="form__error-message form__error-message_field_name"></span>
+          </label>
 
-        <label className="form__group">
-          <input type="text" name="job" placeholder="О себе"
-                 className="form__input form__input_name_job" minLength="2" maxLength="200"
-                 required/>
-          <span className="form__error-message form__error-message_field_job"></span>
-        </label>
-      </PopupWithForm>
+          <label className="form__group">
+            <input type="text" name="job" placeholder="О себе"
+                   className="form__input form__input_name_job" minLength="2" maxLength="200"
+                   required/>
+            <span className="form__error-message form__error-message_field_job"></span>
+          </label>
+        </PopupWithForm>
 
-      <PopupWithForm
-        name={'edit-avatar'}
-        title={'Обновить аватар'}
-        buttonName={'Сохранить'}
-        isOpen={isEditAvatarPopupOpen}
-        onClose={closeAllPopups}
-      >
-        <label className="form__group">
-          <input type="url" name="image" placeholder="Ссылка на картинку"
-                 className="form__input form__input_name_image" required/>
-          <span className="form__error-message form__error-message_field_image"></span>
-        </label>
-      </PopupWithForm>
+        <PopupWithForm
+          name={'edit-avatar'}
+          title={'Обновить аватар'}
+          buttonName={'Сохранить'}
+          isOpen={isEditAvatarPopupOpen}
+          onClose={closeAllPopups}
+        >
+          <label className="form__group">
+            <input type="url" name="image" placeholder="Ссылка на картинку"
+                   className="form__input form__input_name_image" required/>
+            <span className="form__error-message form__error-message_field_image"></span>
+          </label>
+        </PopupWithForm>
 
-      <PopupWithForm
-        name={'add-place-card'}
-        title={'Новое место'}
-        buttonName={'Создать'}
+        <PopupWithForm
+          name={'add-place-card'}
+          title={'Новое место'}
+          buttonName={'Создать'}
 
-        isOpen={isAddPlacePopupOpen}
-        onClose={closeAllPopups}
-      >
-        <label className="form__group">
-          <input type="text" name="name" placeholder="Название"
-                 className="form__input form__input_name_name" minLength="2" maxLength="30"
-                 required/>
-          <span className="form__error-message form__error-message_field_name"></span>
-        </label>
+          isOpen={isAddPlacePopupOpen}
+          onClose={closeAllPopups}
+        >
+          <label className="form__group">
+            <input type="text" name="name" placeholder="Название"
+                   className="form__input form__input_name_name" minLength="2" maxLength="30"
+                   required/>
+            <span className="form__error-message form__error-message_field_name"></span>
+          </label>
 
-        <label className="form__group">
-          <input type="url" name="image" placeholder="Ссылка на картинку"
-                 className="form__input form__input_name_image" required/>
-          <span className="form__error-message form__error-message_field_image"></span>
-        </label>
-      </PopupWithForm>
+          <label className="form__group">
+            <input type="url" name="image" placeholder="Ссылка на картинку"
+                   className="form__input form__input_name_image" required/>
+            <span className="form__error-message form__error-message_field_image"></span>
+          </label>
+        </PopupWithForm>
 
-      <PopupWithForm
-        name={'confirm'}
-        title={'Вы уверены?'}
-        buttonName={'Да'}
-      />
+        <PopupWithForm
+          name={'confirm'}
+          title={'Вы уверены?'}
+          buttonName={'Да'}
+        />
 
-      <ImagePopup
-        card={selectedCard}
-        onCardClick={handleCardClick}
-        isOpen={isImagePopupOpen}
-        onClose={closeAllPopups}
-      />
-    </>
+        <ImagePopup
+          card={selectedCard}
+          onCardClick={handleCardClick}
+          isOpen={isImagePopupOpen}
+          onClose={closeAllPopups}
+        />
+      </>
+    </CurrentUserContext.Provider>
+
   );
 }
 
