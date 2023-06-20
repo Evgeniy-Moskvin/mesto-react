@@ -1,7 +1,7 @@
 import React from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-const Card = ({card, onCardClick, onCardLike}) => {
+const Card = ({card, onCardClick, onCardLike, onCardDelete}) => {
 
   const currentUser = React.useContext(CurrentUserContext);
 
@@ -16,11 +16,15 @@ const Card = ({card, onCardClick, onCardLike}) => {
     onCardLike(card);
   }
 
+  function handleDeleteClick() {
+    onCardDelete(card);
+  }
+
   return (
     <li className="places__item">
       <figure className="place-card places__card">
         {isOwn && <button type="button" aria-label="Удалить"
-                          className="button-delete opacity-effect place-card__delete"></button>}
+                          className="button-delete opacity-effect place-card__delete" onClick={handleDeleteClick}></button>}
         <div className="place-card__image-wrap">
           <img src={card.link} alt={card.name} className="place-card__image" onClick={handleClick}/>
         </div>
