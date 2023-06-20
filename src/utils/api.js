@@ -26,7 +26,7 @@ class Api {
       .then(res => this._gerResponseJson(res));
   }
 
-  updateUserInfo({ name, about}) {
+  updateUserInfo({ name, about }) {
     return fetch(`${this.url}/users/me`, {
       method: 'PATCH',
       headers: this.headers,
@@ -38,7 +38,7 @@ class Api {
       .then(res => this._gerResponseJson(res));
   }
 
-  updateUserAvatar({image}) {
+  updateUserAvatar({ image }) {
     return fetch(`${this.url}/users/me/avatar`, {
       method: 'PATCH',
       headers: this.headers,
@@ -83,6 +83,22 @@ class Api {
       headers: this.headers,
     })
       .then(res => this._gerResponseJson(res));
+  }
+
+  changeLikeCardStatus(id, isLiked) {
+    if (isLiked) {
+      return fetch(`${this.url}/cards/${id}/likes`, {
+        method: 'DELETE',
+        headers: this.headers,
+      })
+        .then(res => this._gerResponseJson(res));
+    } else {
+      return fetch(`${this.url}/cards/${id}/likes`, {
+        method: 'PUT',
+        headers: this.headers,
+      })
+        .then(res => this._gerResponseJson(res));
+    }
   }
 }
 

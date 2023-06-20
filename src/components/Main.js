@@ -3,10 +3,10 @@ import { api } from '../utils/api';
 import Card from './Card';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-const Main = ({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) => {
+const Main = ({ cards, handleCardsChange, onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardLike }) => {
 
 
-  const [cards, setCards] = React.useState([]);
+  //const [cards, setCards] = React.useState([]);
 
   const currentUser = React.useContext(CurrentUserContext);
 
@@ -14,7 +14,7 @@ const Main = ({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) => {
 
     api.getInitialCards()
       .then(data => {
-        setCards(data);
+        handleCardsChange(data);
       })
       .catch(err => console.log(err));
   }, []);
@@ -43,8 +43,8 @@ const Main = ({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) => {
       <section className="places container" aria-label="Добавленные места">
         <ul className="places__grid">
           {
-            cards.map(({ _id, ...props }) => (
-              <Card key={_id} {...props} onCardClick={onCardClick}/>
+            cards.map((card) => (
+              <Card key={card._id} card={card} onCardClick={onCardClick} onCardLike={onCardLike}/>
             ))
           }
         </ul>

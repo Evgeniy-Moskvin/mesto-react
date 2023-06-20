@@ -7,13 +7,19 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import { api } from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { logDOM } from '@testing-library/react';
 
 function App() {
+  const [cards, setCards] = React.useState([]);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
+
+  function handleCardsChange(data) {
+    setCards(data);
+  }
 
   React.useEffect(() => {
     api.getUserInfo()
@@ -44,10 +50,20 @@ function App() {
 
   const handleCardClick = ({ link, name }) => {
     setSelectedCard({ link: link, name: name });
-    setIsImagePopupOpen(true)
+    setIsImagePopupOpen(true);
   }
 
   const [selectedCard, setSelectedCard] = React.useState({ link: '', name: '' });
+
+  const handleCardLike = (card) => {
+    // Снова проверяем, есть ли уже лайк на этой карточке
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+
+    // Отправляем запрос в API и получаем обновлённые данные карточки
+    api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
+      setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    });
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -55,10 +71,13 @@ function App() {
         <Header/>
 
         <Main
+          cards={cards}
+          handleCardsChange={handleCardsChange}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick}
+          onCardLike={handleCardLike}
         />
 
         <Footer/>
