@@ -7,7 +7,7 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import { api } from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { logDOM } from '@testing-library/react';
+import EditProfilePopup from './EditProfilePopup';
 
 function App() {
   const [cards, setCards] = React.useState([]);
@@ -68,11 +68,22 @@ function App() {
   }
 
   const handleCardDelete = (card) => {
-    api.removeCard(card._id).then(() => {
-      setCards((state) =>
-        state.filter((c) => !(c._id === card._id))
-      );
-    })
+    api.removeCard(card._id)
+      .then(() => {
+        setCards((state) =>
+          state.filter((c) => !(c._id === card._id))
+        );
+      })
+      .catch(err => console.log(err));
+  }
+
+  const handleUpdateUser = ({ name, about }) => {
+    api.updateUserInfo({ name, about})
+      .then((data) => {
+        setCurrentUser(data);
+        closeAllPopups();
+      })
+      .catch(err => console.log(err));
   }
 
   return (
@@ -93,27 +104,8 @@ function App() {
 
         <Footer/>
 
-        <PopupWithForm
-          name={'edit-profile'}
-          title={'Редактировать профиль'}
-          buttonName={'Сохранить'}
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-        >
-          <label className="form__group">
-            <input type="text" name="name" placeholder="Имя"
-                   className="form__input form__input_name_name" minLength="2" maxLength="40"
-                   required/>
-            <span className="form__error-message form__error-message_field_name"></span>
-          </label>
+        <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
 
-          <label className="form__group">
-            <input type="text" name="job" placeholder="О себе"
-                   className="form__input form__input_name_job" minLength="2" maxLength="200"
-                   required/>
-            <span className="form__error-message form__error-message_field_job"></span>
-          </label>
-        </PopupWithForm>
 
         <PopupWithForm
           name={'edit-avatar'}
