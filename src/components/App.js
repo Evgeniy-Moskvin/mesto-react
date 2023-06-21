@@ -8,6 +8,7 @@ import ImagePopup from './ImagePopup';
 import { api } from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
 
 function App() {
   const [cards, setCards] = React.useState([]);
@@ -86,6 +87,16 @@ function App() {
       .catch(err => console.log(err));
   }
 
+  const handleUpdateAvatar = (avatar) => {
+
+    api.updateUserAvatar({image: avatar.avatar})
+      .then((data) => {
+        setCurrentUser(data);
+        closeAllPopups();
+      })
+      .catch(err => console.log(err));
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <>
@@ -106,8 +117,9 @@ function App() {
 
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
 
+        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
 
-        <PopupWithForm
+        {/*<PopupWithForm
           name={'edit-avatar'}
           title={'Обновить аватар'}
           buttonName={'Сохранить'}
@@ -119,7 +131,7 @@ function App() {
                    className="form__input form__input_name_image" required/>
             <span className="form__error-message form__error-message_field_image"></span>
           </label>
-        </PopupWithForm>
+        </PopupWithForm>*/}
 
         <PopupWithForm
           name={'add-place-card'}
