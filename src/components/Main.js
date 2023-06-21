@@ -7,7 +7,6 @@ const Main = ({ cards, onEditProfile, onAddPlace, onEditAvatar, onCardClick, onC
   const currentUser = React.useContext(CurrentUserContext);
 
 
-
   return (
     <main>
       <section className="profile container">
@@ -33,7 +32,8 @@ const Main = ({ cards, onEditProfile, onAddPlace, onEditAvatar, onCardClick, onC
         <ul className="places__grid">
           {
             cards.map((card) => (
-              <Card key={card._id} card={card} onCardClick={onCardClick} onCardLike={onCardLike} onCardDelete={onCardDelete}/>
+              <Card key={card._id} card={card} onCardClick={onCardClick} onCardLike={onCardLike}
+                    onCardDelete={onCardDelete}/>
             ))
           }
         </ul>

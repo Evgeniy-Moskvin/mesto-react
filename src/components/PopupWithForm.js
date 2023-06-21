@@ -5,7 +5,7 @@ const PopupWithForm = ({ title, name, buttonName, children, isOpen, onClose, onS
     <div className={`popup popup_name_${name} ${isOpen && 'popup_opened'}`}>
       <div className="popup__container">
         <button type="button" className="button-close opacity-effect popup__close" onClick={onClose}></button>
-        <form name={`form-${name}`} className="form" noValidate onSubmit={onSubmit}>
+        <form name={`form-${name}`} className="form" onSubmit={onSubmit}>
           <fieldset className="form__fieldset">
             <legend className="form__legend">
               <h2 className="popup__title">{title}</h2>

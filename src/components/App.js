@@ -18,26 +18,18 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
+  const [selectedCard, setSelectedCard] = React.useState({ link: '', name: '' });
 
   function handleCardsChange(data) {
     setCards(data);
   }
 
   React.useEffect(() => {
-
-    api.getInitialCards()
-      .then(data => {
-        handleCardsChange(data);
+    Promise.all([api.getInitialCards(), api.getUserInfo()])
+      .then(([dataCards, dataUser]) => {
+        handleCardsChange(dataCards);
+        setCurrentUser(dataUser);
       })
-      .catch(err => console.log(err));
-  }, []);
-
-  React.useEffect(() => {
-    api.getUserInfo()
-      .then(data => {
-        setCurrentUser(data);
-      })
-      .catch(err => console.log(err));
   }, []);
 
 
@@ -64,8 +56,6 @@ function App() {
     setIsImagePopupOpen(true);
   }
 
-  const [selectedCard, setSelectedCard] = React.useState({ link: '', name: '' });
-
   const handleCardLike = (card) => {
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -89,7 +79,7 @@ function App() {
   }
 
   const handleUpdateUser = ({ name, about }) => {
-    api.updateUserInfo({ name, about})
+    api.updateUserInfo({ name, about })
       .then((data) => {
         setCurrentUser(data);
         closeAllPopups();
@@ -99,7 +89,7 @@ function App() {
 
   const handleUpdateAvatar = (avatar) => {
 
-    api.updateUserAvatar({image: avatar.avatar})
+    api.updateUserAvatar({ image: avatar.avatar })
       .then((data) => {
         setCurrentUser(data);
         closeAllPopups();
@@ -107,7 +97,7 @@ function App() {
       .catch(err => console.log(err));
   }
 
-  const handleAddPlaceSubmit = ({ name, link}) => {
+  const handleAddPlaceSubmit = ({ name, link }) => {
     api.addCard({ name, link })
       .then((data) => {
         setCards([data, ...cards]);
@@ -154,7 +144,6 @@ function App() {
         />
       </>
     </CurrentUserContext.Provider>
-
   );
 }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import PopupWithForm from './PopupWithForm';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-const EditProfilePopup = ({isOpen, onClose, onUpdateUser}) => {
+const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
   const currentUser = React.useContext(CurrentUserContext);
 
   const [name, setName] = React.useState('');
@@ -13,7 +13,7 @@ const EditProfilePopup = ({isOpen, onClose, onUpdateUser}) => {
   React.useEffect(() => {
     setName(currentUser.name);
     setDescription(currentUser.about);
-  }, [currentUser]);
+  }, [currentUser, isOpen]);
 
 
   const handleChangeName = (evt) => {
