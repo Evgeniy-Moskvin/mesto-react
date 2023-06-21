@@ -9,6 +9,7 @@ import { api } from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
 
 function App() {
   const [cards, setCards] = React.useState([]);
@@ -21,6 +22,15 @@ function App() {
   function handleCardsChange(data) {
     setCards(data);
   }
+
+  React.useEffect(() => {
+
+    api.getInitialCards()
+      .then(data => {
+        handleCardsChange(data);
+      })
+      .catch(err => console.log(err));
+  }, []);
 
   React.useEffect(() => {
     api.getUserInfo()
@@ -97,6 +107,15 @@ function App() {
       .catch(err => console.log(err));
   }
 
+  const handleAddPlaceSubmit = ({ name, link}) => {
+    api.addCard({ name, link })
+      .then((data) => {
+        setCards([data, ...cards]);
+        closeAllPopups();
+      })
+      .catch(err => console.log(err));
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <>
@@ -119,41 +138,7 @@ function App() {
 
         <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
 
-        {/*<PopupWithForm
-          name={'edit-avatar'}
-          title={'Обновить аватар'}
-          buttonName={'Сохранить'}
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-        >
-          <label className="form__group">
-            <input type="url" name="image" placeholder="Ссылка на картинку"
-                   className="form__input form__input_name_image" required/>
-            <span className="form__error-message form__error-message_field_image"></span>
-          </label>
-        </PopupWithForm>*/}
-
-        <PopupWithForm
-          name={'add-place-card'}
-          title={'Новое место'}
-          buttonName={'Создать'}
-
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-        >
-          <label className="form__group">
-            <input type="text" name="name" placeholder="Название"
-                   className="form__input form__input_name_name" minLength="2" maxLength="30"
-                   required/>
-            <span className="form__error-message form__error-message_field_name"></span>
-          </label>
-
-          <label className="form__group">
-            <input type="url" name="image" placeholder="Ссылка на картинку"
-                   className="form__input form__input_name_image" required/>
-            <span className="form__error-message form__error-message_field_image"></span>
-          </label>
-        </PopupWithForm>
+        <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddCard={handleAddPlaceSubmit}/>
 
         <PopupWithForm
           name={'confirm'}
