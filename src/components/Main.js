@@ -6,7 +6,6 @@ const Main = ({ cards, onEditProfile, onAddPlace, onEditAvatar, onCardClick, onC
 
   const currentUser = React.useContext(CurrentUserContext);
 
-
   return (
     <main>
       <section className="profile container">

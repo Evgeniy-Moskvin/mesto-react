@@ -32,7 +32,6 @@ function App() {
       })
   }, []);
 
-
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
   }

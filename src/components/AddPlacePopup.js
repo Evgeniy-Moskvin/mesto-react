@@ -6,6 +6,11 @@ const AddPlacePopup = ({ isOpen, onClose, onAddCard }) => {
   const [name, setName] = React.useState('');
   const [link, setLink] = React.useState('');
 
+  React.useEffect(() => {
+    setName('');
+    setLink('');
+  }, [isOpen]);
+
   const handleChangeName = (evt) => {
     setName(evt.target.value);
   }
